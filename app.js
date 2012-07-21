@@ -79,5 +79,9 @@
   }
   animate()
 
+  $('speed').onchange = function(){
+    speed = parseInt($('speed').value)
+  }
+
 }).apply(window)
 
