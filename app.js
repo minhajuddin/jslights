@@ -1,7 +1,7 @@
 (function() {
   width = 800
   height = 500
-  speed = 10
+  speed = 100
 
   log = function() {
     console.log.apply(console, arguments)
@@ -64,23 +64,20 @@
   })
 
   pos = 0
+  lastPos = 125
   toggle = true
-  animate = function() {++pos
-    if (pos == 126) toggle = ! toggle
-    pos = pos % 126
-    if (toggle) off(rectangleCoordinates[pos][0], rectangleCoordinates[pos][1])
-    else on(rectangleCoordinates[pos][0], rectangleCoordinates[pos][1])
+  animate = function() {
+    ++pos;
+    if (pos == 126) toggle = ! toggle;
+    pos = pos % 126;
+    off(rectangleCoordinates[pos][0], rectangleCoordinates[pos][1]);
+    on(rectangleCoordinates[lastPos][0], rectangleCoordinates[lastPos][1]);
+
+    lastPos = pos
+
+    setTimeout(animate, speed)
   }
+  animate()
 
-  setInterval(animate, speed)
-
-  //
-  //toggle = true
-  //setInterval(function(){
-  //toggle ? on(10, 10) : off(10, 10)
-  //toggle = !toggle
-  //}, speed)
-  //for(i = 20; i < 800; i += 20)
-  //on(10, i)
 }).apply(window)
 
