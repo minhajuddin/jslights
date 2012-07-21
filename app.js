@@ -1,7 +1,7 @@
 (function() {
   width = 800
   height = 500
-  speed = 500
+  speed = 10
 
   log = function() {
     console.log.apply(console, arguments)
@@ -25,22 +25,62 @@
     ctx.fillRect(x, y, width = 10, height = 10);
   }
 
-  drawLights = function(x1, y1, x2, y2){
-    on(x1, y1)
-    on(x2, y2)
+  range = function(start, end) {
+    arr = _.range.apply(_, arguments)
+    if (_.isEmpty(arr)) arr = [start]
+    return arr
   }
 
-  drawLights(10,10, 780, 10)
+  lineCoordinates = function(x1, y1, x2, y2, sign) {
+    xrange = range(x1, x2, 20 * sign)
+    yrange = range(y1, y2, 20 * sign)
 
+    if (xrange.length > yrange.length) {
+      yrange = _.map(_.range(xrange.length), function() {
+        return y1
+      })
+    } else {
+      xrange = _.map(_.range(yrange.length), function() {
+        return x1
+      })
+    }
+
+    return _.zip(xrange, yrange)
+  }
+
+  rect = [
+  lineCoordinates(10, 10, 790, 10, 1), //top --
+  lineCoordinates(790, 10, 800, 490, 1), // right |
+  lineCoordinates(790, 490, 10, 490, - 1), //bottom --
+  lineCoordinates(10, 490, 10, 10, - 1), //left |
+  ]
+
+  rectangleCoordinates = _.flatten(rect, 1)
+
+  log(rectangleCoordinates)
+
+  _.each(rectangleCoordinates, function(c) {
+    on(c[0], c[1])
+  })
+
+  pos = 0
+  toggle = true
+  animate = function() {++pos
+    if (pos == 126) toggle = ! toggle
+    pos = pos % 126
+    if (toggle) off(rectangleCoordinates[pos][0], rectangleCoordinates[pos][1])
+    else on(rectangleCoordinates[pos][0], rectangleCoordinates[pos][1])
+  }
+
+  setInterval(animate, speed)
+
+  //
   //toggle = true
   //setInterval(function(){
-    //toggle ? on(10, 10) : off(10, 10)
-    //toggle = !toggle
+  //toggle ? on(10, 10) : off(10, 10)
+  //toggle = !toggle
   //}, speed)
-
   //for(i = 20; i < 800; i += 20)
-    //on(10, i)
-
-
+  //on(10, i)
 }).apply(window)
 
